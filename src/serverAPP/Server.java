@@ -18,11 +18,10 @@ public class Server {
             while (!serverSocket.isClosed()) {
 
                 Socket socket = serverSocket.accept();
-                System.out.println("Un utilisateur a rejoint la session !");
                 ClientHandler clientHandler = new ClientHandler(socket);
-
                 Thread thread = new Thread(clientHandler);
                 thread.start();
+                System.out.println(clientHandler.clientUsername + " a rejoint la session ! Nombre d'utilisateur actuellements connectés : " + clientHandler.clientHandlers.size());
 
             }
         } catch (IOException e) {

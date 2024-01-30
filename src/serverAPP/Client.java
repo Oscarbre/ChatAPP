@@ -85,6 +85,7 @@ public class Client {
             String username = scanner.nextLine();
             Socket socket = new Socket("localhost", 1234);
             Client client = new Client(socket, username);
+            System.out.println("SERVER : Vous avez rejoint la conversation. ");
             client.listenForMessage();
             client.sendMessage();
         } catch (IOException e) {
