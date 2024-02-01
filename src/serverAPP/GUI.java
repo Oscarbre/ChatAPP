@@ -1,34 +1,58 @@
 package serverAPP;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class GUI extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Créez les composants de votre interface utilisateur
+
+        Controller controller = new Controller();
+
+        // Conteneur pour composants
+
+        GridPane root = new GridPane();
+        root.setAlignment(Pos.CENTER);
+        root.setHgap(10);
+        root.setVgap(10);
+        root.setPadding(new Insets(25, 25, 25, 25));
+
+        // Composants
+
         Button btn = new Button();
-        btn.setText("Envoyer >");
+        btn.setText("Se connecter au serveur >");
 
-        // Ajoutez un gestionnaire d'événements au bouton
-        btn.setOnAction(e -> System.out.println("Hello World!"));
+        // Gestionnaire d'évenements du boutton
 
-        // Créez un conteneur pour vos composants (dans cet exemple, un StackPane)
-        StackPane root = new StackPane();
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent a) {
+                controller.createClient();
+            }
+        });
+
+        
         root.getChildren().add(btn);
 
-        // Créez une scène avec le conteneur
+        // Création d'une scène
+
         Scene scene = new Scene(root, 400, 550);
 
-        // Définissez la scène sur la fenêtre principale (primaryStage)
+        // Définir la scène sur la fenêtre principale 
+
         primaryStage.setTitle("Oscar CHENE - ChatAPP");
         primaryStage.setScene(scene);
 
-        // Affichez la fenêtre principale
+        // Affichage la fenêtre principale
+
         primaryStage.show();
     }
 

@@ -23,7 +23,7 @@
             "request": "launch",
             "mainClass": "serverAPP.GUI",
             "projectName": "ChatAPP_3806da7f",
-            "vmArgs": "--module-path 'C:/Program Files/Java/javafx-sdk-21.0.2/lib' --add-modules javafx.controls,javafx.fxml",
+            "vmArgs": "--module-path 'C:/Program Files/Java/javafx-sdk-21.0.2/lib' --add-modules javafx.controls,javafx.fxml"
         },
         {
             "type": "java",
