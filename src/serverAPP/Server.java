@@ -6,6 +6,7 @@ import java.net.*;
 public class Server {
 
     private ServerSocket serverSocket;
+    private final int port = 1234;
 
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
@@ -40,7 +41,7 @@ public class Server {
     }
 
     public static void main(String[] args) throws Exception {
-            ServerSocket serverSocket = new ServerSocket(1234);
+            ServerSocket serverSocket = new ServerSocket(port);
             Server server = new Server(serverSocket);
             server.startServer();
     }
