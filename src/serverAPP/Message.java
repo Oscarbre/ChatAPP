@@ -4,7 +4,7 @@ public class Message(){
 
     Client emetteur;
     Client destinataire;
-    String texte;
+    String data;
 
     public void  Message(Client emetteur, Client destinataire, String texte) {
         this.emetteur = emetteur;
@@ -20,7 +20,7 @@ public class Message(){
         return message.destinataire;
     }
 
-    public getText(Message message) {
+    public getData(Message message) {
         return message.texte;
     }
 }

@@ -13,17 +13,13 @@ public class Server {
     }
 
     public void startServer() {
-
         try {
-
             while (!serverSocket.isClosed()) {
-
                 Socket socket = serverSocket.accept();
                 ClientHandler clientHandler = new ClientHandler(socket);
                 Thread thread = new Thread(clientHandler);
                 thread.start();
                 System.out.println(clientHandler.clientUsername + " a rejoint la session ! Nombre d'utilisateur actuellements connectés : " + clientHandler.clientHandlers.size());
-
             }
         } catch (IOException e) {
 
