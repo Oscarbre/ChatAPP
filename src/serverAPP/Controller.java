@@ -17,7 +17,7 @@ public class Controller {
             Client client = new Client(socket, username);
             System.out.println("SERVER : Vous avez rejoint la conversation. ");
             client.listenForMessage();
-            // client.sendMessage();
+            client.sendMessage();
         } catch (IOException e) {
             e.printStackTrace();
         }
