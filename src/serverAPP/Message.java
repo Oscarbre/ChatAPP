@@ -1,26 +1,26 @@
 package serverAPP;
 
-public class Message(){
+public class Message{
 
-    Client emetteur;
-    Client destinataire;
+    Client sender;
+    Client receiver;
     String data;
 
-    public void  Message(Client emetteur, Client destinataire, String texte) {
-        this.emetteur = emetteur;
-        this.destinataire = destinataire;
-        this.texte = texte;
+    public void  Message(Client sender, Client receiver, String data) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.data = data;
     }
 
-    public getEmetteur(Message message) {
-        return message.emetteur;
+    public Client getSender(Message message) {
+        return message.sender;
     }
 
-    public getDestinataire(Message message) {
-        return message.destinataire;
+    public Client getReceiver(Message message) {
+        return message.receiver;
     }
 
-    public getData(Message message) {
-        return message.texte;
+    public String getText(Message message) {
+        return message.data;
     }
 }

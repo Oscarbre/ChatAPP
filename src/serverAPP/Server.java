@@ -6,7 +6,7 @@ import java.net.*;
 public class Server {
 
     private ServerSocket serverSocket;
-    private final int port = 1234;
+    public static int port = 1234;
 
     public Server(ServerSocket serverSocket) {
         this.serverSocket = serverSocket;
