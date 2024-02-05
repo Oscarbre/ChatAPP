@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -14,6 +16,8 @@ public class Client {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String username;
+    private ObjectInputStream inputStream;
+    private ObjectOutputStream outputStream;
 
     public Client(Socket socket, String username) {
         try {
@@ -26,23 +30,25 @@ public class Client {
         }
     } 
 
-    // public void sendMessage() {
-    //     try {
-    //         bufferedWriter.write(username);
-    //         bufferedWriter.newLine();
-    //         bufferedWriter.flush();
+    public void sendMessage() {
+        try {
+            bufferedWriter.write(username);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
 
-    //         Scanner scanner = new Scanner(System.in);
-    //         while (socket.isConnected()) {
-    //             String messageToSend = scanner.nextLine();
-    //             bufferedWriter.write(username + ": " + messageToSend);
-    //             bufferedWriter.newLine();
-    //             bufferedWriter.flush();
-    //         }
-    //     } catch (IOException e) {
-    //         closeEverything(socket, bufferedReader, bufferedWriter);
-    //     }
-    // }
+            Scanner scanner = new Scanner(System.in);
+            while (socket.isConnected()) {
+                String messageToSend = scanner.nextLine();
+                Message message = new Message(this, null, messageToSend);
+                outputStream.writeObject(message);
+                // bufferedWriter.write(username + ": " + messageToSend);
+                // bufferedWriter.newLine();
+                // bufferedWriter.flush();
+            }
+        } catch (IOException e) {
+            closeEverything(socket, bufferedReader, bufferedWriter);
+        }
+    }
 
     public void listenForMessage() {
         new Thread(new Runnable() {
@@ -52,9 +58,10 @@ public class Client {
 
                 while (socket.isConnected()) {
                     try {
-                        msgFromGroupChat = (new ObjectInputStream(socket.getInputStream())).readObject();
-                        System.out.println(msgFromGroupChat.getData);
-                    } catch (IOException e) {
+                        inputStream = new ObjectInputStream(socket.getInputStream());
+                        msgFromGroupChat = (Message) inputStream.readObject();
+                        System.out.println(msgFromGroupChat.getData());
+                    } catch (IOException | ClassNotFoundException e) {
                         closeEverything(socket, bufferedReader, bufferedWriter);
                     }
                 }

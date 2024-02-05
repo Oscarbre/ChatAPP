@@ -6,21 +6,21 @@ public class Message{
     Client receiver;
     String data;
 
-    public void  Message(Client sender, Client receiver, String data) {
+    public  Message(Client sender, Client receiver, String data) {
         this.sender = sender;
         this.receiver = receiver;
         this.data = data;
     }
 
-    public Client getSender(Message message) {
-        return message.sender;
+    public Client getSender() {
+        return this.sender;
     }
 
-    public Client getReceiver(Message message) {
-        return message.receiver;
+    public Client getReceiver() {
+        return this.receiver;
     }
 
-    public String getText(Message message) {
-        return message.data;
+    public String getData() {
+        return this.data;
     }
 }

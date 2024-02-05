@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ public class ClientHandler implements Runnable {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     public String clientUsername;
+    private ObjectInputStream inputStream;
+    private ObjectOutputStream outputStream;
 
     public ClientHandler(Socket socket) {
         try {
@@ -32,13 +36,13 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        String messageFromClient;
+        Message messageFromClient;
 
         while (socket.isConnected()) {
             try {
-                messageFromClient = bufferedReader.readLine();
-                broadcastMessage(messageFromClient);
-            } catch (IOException e) {
+                messageFromClient = (Message) inputStream.readObject();
+                broadcastMessage(messageFromClient.getData());
+            } catch (IOException | ClassNotFoundException e) {
                 closeEverything(socket, bufferedReader, bufferedWriter);
                 break;
             }
@@ -48,11 +52,12 @@ public class ClientHandler implements Runnable {
     public void broadcastMessage(String messageToSend) {
         for (ClientHandler clientHandler : clientHandlers) {
             try {
-                if (!clientHandler.clientUsername.equals(clientUsername)) {
-                    clientHandler.bufferedWriter.write(messageToSend);
-                    clientHandler.bufferedWriter.newLine();
-                    clientHandler.bufferedWriter.flush();
-                }
+                // if (!clientHandler.clientUsername.equals(clientUsername)) {
+                //     clientHandler.bufferedWriter.write(messageToSend);
+                //     clientHandler.bufferedWriter.newLine();
+                //     clientHandler.bufferedWriter.flush();
+                // }
+                clientHandler.bufferedWriter.write(messageToSend);
             } catch (IOException e) {
                 closeEverything(socket, bufferedReader, bufferedWriter);
             }
