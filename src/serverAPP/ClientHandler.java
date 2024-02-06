@@ -1,11 +1,10 @@
 package serverAPP;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -13,22 +12,21 @@ import java.util.ArrayList;
 public class ClientHandler implements Runnable {
 
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
-    
+    private ObjectMapper objectMapper; //sérialisation json
+
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     public String clientUsername;
-    private ObjectInputStream inputStream;
-    private ObjectOutputStream outputStream;
+    
 
     public ClientHandler(Socket socket) {
         try {
             this.socket = socket;
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.inputStream = new ObjectInputStream(socket.getInputStream());
-            this.outputStream = new ObjectOutputStream(socket.getOutputStream());
             this.clientUsername = bufferedReader.readLine();
+            this.objectMapper = new ObjectMapper();
             clientHandlers.add(this);
             broadcastMessage("SERVER : " + clientUsername + " a rejoint la conversation !");
         } catch (IOException e) {
@@ -42,9 +40,10 @@ public class ClientHandler implements Runnable {
 
         while (socket.isConnected()) {
             try {
-                messageFromClient = (Message) inputStream.readObject();
+                String jsonInput = bufferedReader.readLine();
+                messageFromClient = objectMapper.readValue(jsonInput, Message.class);
                 broadcastMessage(messageFromClient.getData());
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (IOException  e) {
                 closeEverything(socket, bufferedReader, bufferedWriter);
                 break;
             }
@@ -54,14 +53,15 @@ public class ClientHandler implements Runnable {
     public void broadcastMessage(String messageToSend) {
         for (ClientHandler clientHandler : clientHandlers) {
             try {
-                // if (!clientHandler.clientUsername.equals(clientUsername)) {
-                //     clientHandler.bufferedWriter.write(messageToSend);
-                //     clientHandler.bufferedWriter.newLine();
-                //     clientHandler.bufferedWriter.flush();
-                // }
+                if (!clientHandler.clientUsername.equals(clientUsername)) {
+                    clientHandler.bufferedWriter.write(messageToSend);
+                    clientHandler.bufferedWriter.newLine();
+                    clientHandler.bufferedWriter.flush();
+                }
                 clientHandler.bufferedWriter.write(messageToSend);
             } catch (IOException e) {
                 closeEverything(socket, bufferedReader, bufferedWriter);
+                e.printStackTrace();
             }
         }
     }    

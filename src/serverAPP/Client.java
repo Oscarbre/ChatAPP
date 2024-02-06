@@ -1,11 +1,10 @@
 package serverAPP;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.Scanner;
@@ -16,8 +15,7 @@ public class Client {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String username;
-    private ObjectInputStream inputStream;
-    private ObjectOutputStream outputStream;
+    private ObjectMapper clientObjectMapper;
 
     public Client(Socket socket, String username) {
         try {
@@ -25,8 +23,7 @@ public class Client {
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.username = username;
-            this.inputStream = new ObjectInputStream(socket.getInputStream());
-            this.outputStream = new ObjectOutputStream(socket.getOutputStream());
+            this.clientObjectMapper = new ObjectMapper();
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
@@ -41,11 +38,12 @@ public class Client {
             Scanner scanner = new Scanner(System.in);
             while (socket.isConnected()) {
                 String messageToSend = scanner.nextLine();
-                Message message = new Message(this, null, messageToSend);
-                outputStream.writeObject(message);
+                Message message = new Message(this.username, "All", messageToSend);
                 // bufferedWriter.write(username + ": " + messageToSend);
-                // bufferedWriter.newLine();
-                // bufferedWriter.flush();
+                String test = clientObjectMapper.writeValueAsString(message);
+                bufferedWriter.write(test);
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
             }
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
@@ -56,14 +54,13 @@ public class Client {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Message msgFromGroupChat;
+                String msgFromGroupChat;
 
                 while (socket.isConnected()) {
                     try {
-                        inputStream = new ObjectInputStream(socket.getInputStream());
-                        msgFromGroupChat = (Message) inputStream.readObject();
-                        System.out.println(msgFromGroupChat.getData());
-                    } catch (IOException | ClassNotFoundException e) {
+                        msgFromGroupChat = bufferedReader.readLine();
+                        System.out.println(msgFromGroupChat);
+                    } catch (IOException e) {
                         closeEverything(socket, bufferedReader, bufferedWriter);
                     }
                 }

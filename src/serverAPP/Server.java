@@ -38,9 +38,9 @@ public class Server {
     }
 
     public static void main(String[] args) throws Exception {
-            ServerSocket serverSocket = new ServerSocket(port);
-            Server server = new Server(serverSocket);
-            server.startServer();
+        ServerSocket serverSocket = new ServerSocket(port);
+        Server server = new Server(serverSocket);
+        server.startServer();
     }
 }
 
