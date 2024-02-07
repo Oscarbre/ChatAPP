@@ -13,7 +13,7 @@ public class Server {
     }
 
     public void startServer() {
-        System.out.println("Serveur ouvert || En attente de connection des clients ");
+        System.out.println("Serveur ouvert || En attente de connection des clients...");
         try {
             while (!serverSocket.isClosed()) {
                 Socket socket = serverSocket.accept();

@@ -38,14 +38,11 @@ public class Client {
             Scanner scanner = new Scanner(System.in);
             while (socket.isConnected()) {
                 String messageToSend = scanner.nextLine();
-                if (messageToSend != null) {
-                    Message message = new Message(this.username, "All", messageToSend);
-                    // bufferedWriter.write(username + ": " + messageToSend);
-                    String test = clientObjectMapper.writeValueAsString(message);
-                    bufferedWriter.write(test);
-                    bufferedWriter.newLine();
-                    bufferedWriter.flush();
-                }
+                Message message = new Message(this.username, "All", messageToSend);
+                String test = clientObjectMapper.writeValueAsString(message);
+                bufferedWriter.write(test);
+                bufferedWriter.newLine();
+                bufferedWriter.flush();
             }
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
@@ -94,6 +91,7 @@ public class Client {
             Socket socket = new Socket("localhost", 1234);
             Client client = new Client(socket, username);
             System.out.println("SERVER : Vous avez rejoint la conversation. ");
+            
             client.listenForMessage();
             client.sendMessage();
         } catch (IOException e) {

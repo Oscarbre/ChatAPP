@@ -44,6 +44,7 @@ public class ClientHandler implements Runnable {
                 messageFromClient = objectMapper.readValue(jsonInput, Message.class);
                 broadcastMessage(messageFromClient.getData());
             } catch (IOException  e) {
+                e.printStackTrace();
                 closeEverything(socket, bufferedReader, bufferedWriter);
                 break;
             }
@@ -62,6 +63,7 @@ public class ClientHandler implements Runnable {
             } catch (IOException e) {
                 closeEverything(socket, bufferedReader, bufferedWriter);
                 e.printStackTrace();
+                
             }
         }
     }    

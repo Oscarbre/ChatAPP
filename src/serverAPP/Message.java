@@ -1,9 +1,16 @@
 package serverAPP;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Message{
 
+    @JsonProperty("sender")
     String sender;
+
+    @JsonProperty("receiver")
     String receiver;
+
+    @JsonProperty("data")
     String data;
 
     public  Message(String sender, String receiver, String data) {
@@ -11,6 +18,8 @@ public class Message{
         this.receiver = receiver;
         this.data = data;
     }
+
+    public Message() {}     // Constructeur pour la désérialisation JSON
 
     public String getSender() {
         return this.sender;
