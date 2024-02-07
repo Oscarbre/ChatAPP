@@ -38,12 +38,14 @@ public class Client {
             Scanner scanner = new Scanner(System.in);
             while (socket.isConnected()) {
                 String messageToSend = scanner.nextLine();
-                Message message = new Message(this.username, "All", messageToSend);
-                // bufferedWriter.write(username + ": " + messageToSend);
-                String test = clientObjectMapper.writeValueAsString(message);
-                bufferedWriter.write(test);
-                bufferedWriter.newLine();
-                bufferedWriter.flush();
+                if (messageToSend != null) {
+                    Message message = new Message(this.username, "All", messageToSend);
+                    // bufferedWriter.write(username + ": " + messageToSend);
+                    String test = clientObjectMapper.writeValueAsString(message);
+                    bufferedWriter.write(test);
+                    bufferedWriter.newLine();
+                    bufferedWriter.flush();
+                }
             }
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
