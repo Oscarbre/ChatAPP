@@ -1,5 +1,6 @@
 package serverAPP;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -14,6 +15,7 @@ public class Client {
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String username;
+    private ObjectMapper clientObjectMapper;
 
     public Client(Socket socket, String username) {
         try {
@@ -21,6 +23,7 @@ public class Client {
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.username = username;
+            this.clientObjectMapper = new ObjectMapper();
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
@@ -35,7 +38,8 @@ public class Client {
             Scanner scanner = new Scanner(System.in);
             while (socket.isConnected()) {
                 String messageToSend = scanner.nextLine();
-                bufferedWriter.write(username + ": " + messageToSend);
+                Message message = new Message(this.username, "All", messageToSend);
+                bufferedWriter.write(clientObjectMapper.writeValueAsString(message));
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
             }
@@ -78,19 +82,20 @@ public class Client {
         }
     }
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
         try {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Entrez votre nom d'utilisateur pour cette conversation : ");
             String username = scanner.nextLine();
             Socket socket = new Socket("localhost", 1234);
             Client client = new Client(socket, username);
+            System.out.println("SERVER : Vous avez rejoint la conversation. ");
+            
             client.listenForMessage();
             client.sendMessage();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
 }

@@ -1,5 +1,6 @@
 package serverAPP;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -11,10 +12,13 @@ import java.util.ArrayList;
 public class ClientHandler implements Runnable {
 
     public static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+    private ObjectMapper objectMapper; //sérialisation json
+
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-    private String clientUsername;
+    public String clientUsername;
+    
 
     public ClientHandler(Socket socket) {
         try {
@@ -22,27 +26,34 @@ public class ClientHandler implements Runnable {
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.clientUsername = bufferedReader.readLine();
+            this.objectMapper = new ObjectMapper();
             clientHandlers.add(this);
             broadcastMessage("SERVER : " + clientUsername + " a rejoint la conversation !");
-        }catch (IOException e) {
+        } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
     }
+    
+        // Thread qui écoute les messages envoyés par son client et qui les redirige vers les autres clients
 
     @Override
     public void run() {
-        String messageFromClient;
+        Message messageFromClient;
 
         while (socket.isConnected()) {
             try {
-                messageFromClient = bufferedReader.readLine();
-                broadcastMessage(messageFromClient);
-            } catch (IOException e) {
+                String jsonInput = bufferedReader.readLine();
+                messageFromClient = objectMapper.readValue(jsonInput, Message.class);
+                broadcastMessage(messageFromClient.getSender() + " : " + messageFromClient.getData());
+            } catch (IOException  e) {
+                e.printStackTrace();
                 closeEverything(socket, bufferedReader, bufferedWriter);
                 break;
             }
         }
     }
+
+        // Envoi d'un message 
 
     public void broadcastMessage(String messageToSend) {
         for (ClientHandler clientHandler : clientHandlers) {
@@ -54,13 +65,15 @@ public class ClientHandler implements Runnable {
                 }
             } catch (IOException e) {
                 closeEverything(socket, bufferedReader, bufferedWriter);
+                e.printStackTrace();
+                
             }
         }
     }    
     
     public void removeClientHandler() {
         clientHandlers.remove(this);
-        broadcastMessage("SERVER " + clientUsername + " a quitté la conversation.");
+        broadcastMessage("SERVER : " + clientUsername + " a quitté la conversation.");
     }
 
     public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
