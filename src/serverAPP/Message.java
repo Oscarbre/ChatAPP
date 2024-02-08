@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Message{
 
-    @JsonProperty("sender")
+    @JsonProperty("sender")     // Permet d'indiquer les propriétés JSON à désérialiser
     String sender;
 
     @JsonProperty("receiver")

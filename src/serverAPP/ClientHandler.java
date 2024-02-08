@@ -33,6 +33,8 @@ public class ClientHandler implements Runnable {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
     }
+    
+        // Thread qui écoute les messages envoyés par son client et qui les redirige vers les autres clients
 
     @Override
     public void run() {
@@ -42,7 +44,7 @@ public class ClientHandler implements Runnable {
             try {
                 String jsonInput = bufferedReader.readLine();
                 messageFromClient = objectMapper.readValue(jsonInput, Message.class);
-                broadcastMessage(messageFromClient.getData());
+                broadcastMessage(messageFromClient.getSender() + " : " + messageFromClient.getData());
             } catch (IOException  e) {
                 e.printStackTrace();
                 closeEverything(socket, bufferedReader, bufferedWriter);
@@ -50,6 +52,8 @@ public class ClientHandler implements Runnable {
             }
         }
     }
+
+        // Envoi d'un message 
 
     public void broadcastMessage(String messageToSend) {
         for (ClientHandler clientHandler : clientHandlers) {
@@ -59,7 +63,6 @@ public class ClientHandler implements Runnable {
                     clientHandler.bufferedWriter.newLine();
                     clientHandler.bufferedWriter.flush();
                 }
-                clientHandler.bufferedWriter.write(messageToSend);
             } catch (IOException e) {
                 closeEverything(socket, bufferedReader, bufferedWriter);
                 e.printStackTrace();

@@ -39,8 +39,7 @@ public class Client {
             while (socket.isConnected()) {
                 String messageToSend = scanner.nextLine();
                 Message message = new Message(this.username, "All", messageToSend);
-                String test = clientObjectMapper.writeValueAsString(message);
-                bufferedWriter.write(test);
+                bufferedWriter.write(clientObjectMapper.writeValueAsString(message));
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
             }
