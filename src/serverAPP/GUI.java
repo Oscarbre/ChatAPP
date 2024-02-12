@@ -32,7 +32,7 @@ public class GUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        this.controller = new Controller();
+        this.controller = new Controller(this);
 
         root = new BorderPane();
         primaryStage.setScene(new Scene(root, 400, 550));

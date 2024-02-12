@@ -42,8 +42,8 @@ public class ClientHandler implements Runnable {
 
         while (socket.isConnected()) {
             try {
-                String jsonInput = bufferedReader.readLine();
-                messageFromClient = objectMapper.readValue(jsonInput, Message.class);
+                String jsonClient = bufferedReader.readLine();
+                messageFromClient = objectMapper.readValue(jsonClient, Message.class);
                 broadcastMessage(messageFromClient.getSender() + " : " + messageFromClient.getData());
             } catch (IOException  e) {
                 e.printStackTrace();
