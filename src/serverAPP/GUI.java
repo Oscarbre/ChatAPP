@@ -21,6 +21,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+//////////////////////////////////////////////////////////              MAIN            ///////////////////////////////////////////////
+
 public class GUI extends Application {
 
     private Stage primaryStage;
@@ -42,6 +44,8 @@ public class GUI extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+//////////////////////////////////////////////////////////              LOGIN SCREEN            ///////////////////////////////////////////////    
 
     private void showLoginScreen() {
         root.getChildren().clear(); //Nettoyage de la racine
@@ -99,8 +103,19 @@ public class GUI extends Application {
         root.setCenter(vbox);  // ajout des éléments à la scène principale 
     }
 
+//////////////////////////////////////////////////////////              CONVERSATION SCREEN            ///////////////////////////////////////////////    
+
     private void showConversationScreen() {
         root.getChildren().clear();
+
+        // Créer le titre de la conversation
+
+        Text title = new Text("Conversation de groupe");
+        title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+        HBox titleHbox = new HBox(5);
+        titleHbox.setPadding(new Insets(10));
+        titleHbox.getChildren().add(title);
+        titleHbox.setAlignment(Pos.CENTER);
 
         // Créer la zone de conversation
         ScrollPane conversationScrollPane = new ScrollPane();
@@ -111,21 +126,24 @@ public class GUI extends Application {
 
         // Créer la zone de saisie de texte
         TextField messageTextArea = new TextField();
-        messageTextArea.scaleXProperty();
+        messageTextArea.setPromptText("Ecrivez un message...");
+        
         // Créer le bouton d'envoi
         Button sendButton = new Button("Envoyer");
         // sendButton.setOnAction(event -> sendMessage(messageTextArea, conversationContainer));
 
         // Ajouter la zone de saisie de texte et le bouton dans un conteneur vertical
         HBox inputContainer = new HBox(5);
-        // HBox.setHgrow(inputContainer, Priority.ALWAYS);
+        HBox.setHgrow(messageTextArea, Priority.ALWAYS);
         inputContainer.getChildren().addAll(messageTextArea, sendButton);
         inputContainer.setPadding(new Insets(10));
         inputContainer.setAlignment(Pos.CENTER);
 
         // Positionner la zone de conversation en haut et la zone de saisie en bas
+        root.setTop(titleHbox);
         root.setCenter(conversationScrollPane);
         root.setBottom(inputContainer);
+
 
     }
     
