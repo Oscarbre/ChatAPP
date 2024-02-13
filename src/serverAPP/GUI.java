@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -19,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 //////////////////////////////////////////////////////////              MAIN            ///////////////////////////////////////////////
@@ -28,6 +28,7 @@ public class GUI extends Application {
     private Stage primaryStage;
     private BorderPane root;
     private Controller controller;
+    private String clientUsername;
 
     @Override
     public void start(Stage primaryStage) {
@@ -88,8 +89,8 @@ public class GUI extends Application {
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent a) {
-                String username = userTextField.getText();
-                // controller.createClient(username);
+                clientUsername = userTextField.getText();
+                controller.createClient(clientUsername);
                 showConversationScreen();
             }
         });
@@ -124,15 +125,39 @@ public class GUI extends Application {
         conversationScrollPane.setFitToWidth(true);
         conversationScrollPane.setFitToHeight(true);
 
+        conversationContainer.setFillWidth(true);
+
+        Label messageLabel = new Label("test1\n \n \n");
+        messageLabel.setStyle("-fx-background-color: #c0c0c0; " + // Background color
+                                   "-fx-text-fill: black; " +             // Text color
+                                   "-fx-padding: 5px; " +                 // Padding
+                                   "-fx-border-radius: 5px;");            // Border radius
+            
+            // Set the font for the message label
+        messageLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 17));
+        messageLabel.setTextAlignment(TextAlignment.RIGHT);
+        conversationContainer.getChildren().add(messageLabel);
+        Label messageLabel2 = new Label("test2\n \n \n");
+        conversationContainer.getChildren().add(messageLabel2);
+        Label messageLabel3 = new Label("test3 \n \n \n");
+        conversationContainer.getChildren().add(messageLabel3);
+
         // Créer la zone de saisie de texte
         TextField messageTextArea = new TextField();
         messageTextArea.setPromptText("Ecrivez un message...");
         
         // Créer le bouton d'envoi
         Button sendButton = new Button("Envoyer");
-        // sendButton.setOnAction(event -> sendMessage(messageTextArea, conversationContainer));
+        sendButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent a) {
+                controller.sendMessage(new Message(clientUsername,"ALL",messageTextArea.getText()));
+                messageTextArea.clear();
+            }
+        });
+                
 
-        // Ajouter la zone de saisie de texte et le bouton dans un conteneur vertical
+        // Ajouter la zone de saisie de texte et le bouton dans un conteneur horizontal
         HBox inputContainer = new HBox(5);
         HBox.setHgrow(messageTextArea, Priority.ALWAYS);
         inputContainer.getChildren().addAll(messageTextArea, sendButton);
@@ -145,6 +170,19 @@ public class GUI extends Application {
         root.setBottom(inputContainer);
 
 
+    }
+
+    public void updateConversationContainer(Message receivedMessage) {
+        Label messageLabel = new Label("test1\n \n \n");
+        messageLabel.setStyle("-fx-background-color: #c0c0c0; " + // Background color
+                                   "-fx-text-fill: black; " +             // Text color
+                                   "-fx-padding: 5px; " +                 // Padding
+                                   "-fx-border-radius: 5px;");            // Border radius
+            
+            // Set the font for the message label
+        messageLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 17));
+        messageLabel.setTextAlignment(TextAlignment.RIGHT);
+        // conversationContainer.getChildren().add(messageLabel);
     }
     
 }

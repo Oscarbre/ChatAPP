@@ -12,24 +12,29 @@ public class Controller {
         this.gui = gui;
     }
 
+//////////////////////////////////////////////////////////             TO CLIENT            ///////////////////////////////////////////////
+
     public void createClient(String username) {
         try {
             Socket socket = new Socket("localhost", 1234);
             client = new Client(socket, username, this);
-            System.out.println("SERVER : Vous avez rejoint la conversation. ");
-            client.listenForMessage();
-            client.sendMessage();
+            client.sendStream(new Message(username,"NONE","NONE")); //pour initialiser le clienHandler
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    void updateConversation(Message msgFromServer){
-
+    public void sendMessage(Message messageToSend){
+        client.sendStream(messageToSend);
     }
 
-    private void sendMessage(){
+//////////////////////////////////////////////////////////             TO GUI            ///////////////////////////////////////////////
 
+
+    public void updateConversation(Message msgFromServer){
+        gui.updateConversationContainer(msgFromServer);
     }
+
+    
     
 }

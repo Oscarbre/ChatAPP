@@ -20,7 +20,7 @@ public class Server {
                 ClientHandler clientHandler = new ClientHandler(socket);
                 Thread thread = new Thread(clientHandler);
                 thread.start();
-                System.out.println(clientHandler.clientUsername + " a rejoint la session ! Nombre d'utilisateur actuellements connectés : " + clientHandler.clientHandlers.size());
+                System.out.println(clientHandler.getClientUsername() + " a rejoint la session ! Nombre d'utilisateur actuellements connectés : " + ClientHandler.clientHandlers.size());
             }
         } catch (IOException e) {
 

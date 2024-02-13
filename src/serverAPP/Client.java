@@ -32,19 +32,20 @@ public class Client {
         }
     } 
 
-    public void sendMessage() {
+    public void sendStream(Message messageToSend) {
         try {
-            bufferedWriter.write(username);
-            bufferedWriter.newLine();
-            bufferedWriter.flush();
-
-            Scanner scanner = new Scanner(System.in);
-            while (socket.isConnected()) {
-                String messageToSend = scanner.nextLine();
-                Message message = new Message(this.username, "All", messageToSend);
-                bufferedWriter.write(clientObjectMapper.writeValueAsString(message));
+            // bufferedWriter.write(username);
+            // bufferedWriter.newLine();
+            // bufferedWriter.flush();
+            // Scanner scanner = new Scanner(System.in);
+            if (socket.isConnected()) {
+                // Message message = new Message(this.username, "All", messageToSend);
+                bufferedWriter.write(clientObjectMapper.writeValueAsString(messageToSend));
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
+            }
+            else {
+                System.out.println("ERREUR : socket non connecté");
             }
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);

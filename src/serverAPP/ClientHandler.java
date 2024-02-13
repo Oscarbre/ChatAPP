@@ -17,18 +17,18 @@ public class ClientHandler implements Runnable {
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
-    public String clientUsername;
+    private String clientUsername;
     
 
     public ClientHandler(Socket socket) {
         try {
             this.socket = socket;
+            this.objectMapper = new ObjectMapper();
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.clientUsername = bufferedReader.readLine();
-            this.objectMapper = new ObjectMapper();
+            this.clientUsername = objectMapper.readValue(bufferedReader.readLine(),Message.class).getSender();
             clientHandlers.add(this);
-            broadcastMessage("SERVER : " + clientUsername + " a rejoint la conversation !");
+            broadcastMessage(new Message("Server","ALL","SERVER : " + clientUsername + " a rejoint la conversation !"));
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }
@@ -44,7 +44,7 @@ public class ClientHandler implements Runnable {
             try {
                 String jsonClient = bufferedReader.readLine();
                 messageFromClient = objectMapper.readValue(jsonClient, Message.class);
-                broadcastMessage(messageFromClient.getSender() + " : " + messageFromClient.getData());
+                broadcastMessage(messageFromClient);
             } catch (IOException  e) {
                 e.printStackTrace();
                 closeEverything(socket, bufferedReader, bufferedWriter);
@@ -55,11 +55,11 @@ public class ClientHandler implements Runnable {
 
         // Envoi d'un message 
 
-    public void broadcastMessage(String messageToSend) {
+    public void broadcastMessage(Message messageToSend) {
         for (ClientHandler clientHandler : clientHandlers) {
             try {
                 if (!clientHandler.clientUsername.equals(clientUsername)) {
-                    clientHandler.bufferedWriter.write(messageToSend);
+                    clientHandler.bufferedWriter.write(objectMapper.writeValueAsString(messageToSend));
                     clientHandler.bufferedWriter.newLine();
                     clientHandler.bufferedWriter.flush();
                 }
@@ -73,7 +73,7 @@ public class ClientHandler implements Runnable {
     
     public void removeClientHandler() {
         clientHandlers.remove(this);
-        broadcastMessage("SERVER : " + clientUsername + " a quitté la conversation.");
+        broadcastMessage(new Message("Server","ALL","SERVER : " + clientUsername + " a quitté la conversation."));
     }
 
     public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
@@ -91,6 +91,10 @@ public class ClientHandler implements Runnable {
         }catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getClientUsername() {
+        return clientUsername;
     }
     
 }
