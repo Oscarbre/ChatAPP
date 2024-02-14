@@ -1,18 +1,32 @@
-## Getting Started
+## Introduction
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+ChatApp est une simple application de messagerie permettant de communiquer avec un groupe, en se connectant à un serveur via un socket. 
 
-## Folder Structure
+## Structure
 
-The workspace contains two folders by default, where:
+L'espace de travail contient 2 dossiers : `src` qui contient les fichiers sources et `bin` qui contient les fichiers compilés générés en conséquence. 
+Le dossier `src` contient plusieurs classes pouvants être séparés en deux groupes :
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+Coté Serveur :
+- `Server`: contient la logique du serveur et la fonction Main permettant de démarrer le serveur.
+- `ClientHandler`: une instance de cette classe est créée pour chaque nouveau client qui se connecte au serveur. Elle s'occupe de rediriger les messages vers les autres clients.
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+Coté Client :
+- `Client`: contient la logique client et les fonctions permettant d'envoyer/d'écouter les messages.
+- `GUI` : contient la logique de l'interface graphique et la fonction Main permettant de démarrer une instance de client.
+- `Controller` : joue le role de mediateur entre l'interface graphique et la logique métier du client.
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+## Architecture
 
-## Dependency Management
+Architecture verticale :
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+     GUI
+      |
+  Controller
+      |
+    Client
+      :
+      :
+ClientHandler
+      |
+    Server
