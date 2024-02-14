@@ -24,14 +24,16 @@ public class Controller {
         }
     }
 
-    public void sendMessage(Message messageToSend){
-        client.sendStream(messageToSend);
+    public void sendMessage(String messageToSend){
+        Message msg = new Message(client.getUsername(),"ALL",messageToSend);
+        client.sendStream(msg);
     }
 
 //////////////////////////////////////////////////////////             TO GUI            ///////////////////////////////////////////////
 
 
     public void updateConversation(Message msgFromServer){
+        BorderPane root = gui.getRoot();
         gui.updateConversationContainer(msgFromServer);
     }
 

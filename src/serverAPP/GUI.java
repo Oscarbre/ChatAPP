@@ -151,7 +151,7 @@ public class GUI extends Application {
         sendButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent a) {
-                controller.sendMessage(new Message(clientUsername,"ALL",messageTextArea.getText()));
+                controller.sendMessage(messageTextArea.getText());
                 messageTextArea.clear();
             }
         });
@@ -183,6 +183,10 @@ public class GUI extends Application {
         messageLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 17));
         messageLabel.setTextAlignment(TextAlignment.RIGHT);
         // conversationContainer.getChildren().add(messageLabel);
+    }
+
+    public BorderPane getRoot() {
+        return root;
     }
     
 }
