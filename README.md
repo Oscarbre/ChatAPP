@@ -18,15 +18,4 @@ Coté Client :
 
 ## Architecture
 
-Architecture verticale :
-
-     GUI
-      |
-  Controller
-      |
-    Client
-      :
-      :
-ClientHandler
-      |
-    Server
+GUI__Controller__Client---ClientHandler__Server
