@@ -3,6 +3,18 @@ package serverAPP;
 import java.io.IOException;
 import java.net.Socket;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+
 public class Controller {
 
     private Client client;
@@ -33,8 +45,21 @@ public class Controller {
 
 
     public void updateConversation(Message msgFromServer){
-        BorderPane root = gui.getRoot();
-        gui.updateConversationContainer(msgFromServer);
+        VBox conversationContainer = gui.getConversationContainer();
+        HBox messageBox = new HBox(5);
+        messageBox.setPadding(new Insets(5, 0, 5, 5));      // haut droite bas gauche
+        messageBox.setAlignment(Pos.CENTER_LEFT);
+
+        Text senderText = new Text(msgFromServer.getSender() + " : ");
+        Text msgText = new Text(msgFromServer.getData());
+        senderText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+        msgText.setFont(Font.font("Arial", 14));
+        
+        messageBox.getChildren().addAll(senderText, msgText);
+
+        conversationContainer.getChildren().add(messageBox);
+        
+        
     }
 
     

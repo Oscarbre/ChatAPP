@@ -5,6 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -28,6 +30,9 @@ public class GUI extends Application {
     private Stage primaryStage;
     private BorderPane root;
     private Controller controller;
+
+    private VBox conversationContainer;     //pour être accessible depuis controller
+
     private String clientUsername;
 
     @Override
@@ -120,27 +125,12 @@ public class GUI extends Application {
 
         // Créer la zone de conversation
         ScrollPane conversationScrollPane = new ScrollPane();
-        VBox conversationContainer = new VBox(); // Pour empiler les messages
+        conversationContainer = new VBox(); // Pour empiler les messages
+
         conversationScrollPane.setContent(conversationContainer);
         conversationScrollPane.setFitToWidth(true);
         conversationScrollPane.setFitToHeight(true);
-
         conversationContainer.setFillWidth(true);
-
-        Label messageLabel = new Label("test1\n \n \n");
-        messageLabel.setStyle("-fx-background-color: #c0c0c0; " + // Background color
-                                   "-fx-text-fill: black; " +             // Text color
-                                   "-fx-padding: 5px; " +                 // Padding
-                                   "-fx-border-radius: 5px;");            // Border radius
-            
-            // Set the font for the message label
-        messageLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 17));
-        messageLabel.setTextAlignment(TextAlignment.RIGHT);
-        conversationContainer.getChildren().add(messageLabel);
-        Label messageLabel2 = new Label("test2\n \n \n");
-        conversationContainer.getChildren().add(messageLabel2);
-        Label messageLabel3 = new Label("test3 \n \n \n");
-        conversationContainer.getChildren().add(messageLabel3);
 
         // Créer la zone de saisie de texte
         TextField messageTextArea = new TextField();
@@ -151,7 +141,8 @@ public class GUI extends Application {
         sendButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent a) {
-                controller.sendMessage(messageTextArea.getText());
+                // controller.sendMessage(messageTextArea.getText());
+                controller.updateConversation(new Message("moi","e","Bonjour !"));
                 messageTextArea.clear();
             }
         });
@@ -172,21 +163,12 @@ public class GUI extends Application {
 
     }
 
-    public void updateConversationContainer(Message receivedMessage) {
-        Label messageLabel = new Label("test1\n \n \n");
-        messageLabel.setStyle("-fx-background-color: #c0c0c0; " + // Background color
-                                   "-fx-text-fill: black; " +             // Text color
-                                   "-fx-padding: 5px; " +                 // Padding
-                                   "-fx-border-radius: 5px;");            // Border radius
-            
-            // Set the font for the message label
-        messageLabel.setFont(Font.font("Arial", FontWeight.NORMAL, 17));
-        messageLabel.setTextAlignment(TextAlignment.RIGHT);
-        // conversationContainer.getChildren().add(messageLabel);
-    }
-
     public BorderPane getRoot() {
         return root;
     }
-    
+
+    public VBox getConversationContainer() {
+        return conversationContainer;
+    }
 }
+

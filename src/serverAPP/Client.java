@@ -34,12 +34,7 @@ public class Client {
 
     public void sendStream(Message messageToSend) {
         try {
-            // bufferedWriter.write(username);
-            // bufferedWriter.newLine();
-            // bufferedWriter.flush();
-            // Scanner scanner = new Scanner(System.in);
             if (socket.isConnected()) {
-                // Message message = new Message(this.username, "All", messageToSend);
                 bufferedWriter.write(clientObjectMapper.writeValueAsString(messageToSend));
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
