@@ -141,8 +141,17 @@ public class GUI extends Application {
         sendButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent a) {
-                // controller.sendMessage(messageTextArea.getText());
-                controller.updateConversation(new Message("moi","e","Bonjour !"));
+                HBox messageBox = new HBox(5);
+                messageBox.setPadding(new Insets(5, 0, 5, 5));      // haut droite bas gauche
+                messageBox.setAlignment(Pos.CENTER_LEFT);
+                Text senderText = new Text("moi : ");
+                senderText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+                Text msgText = new Text(messageTextArea.getText());
+                msgText.setFont(Font.font("Arial", 14));
+                messageBox.getChildren().addAll(senderText, msgText);
+                conversationContainer.getChildren().add(messageBox);
+
+                controller.sendMessage(messageTextArea.getText());
                 messageTextArea.clear();
             }
         });
