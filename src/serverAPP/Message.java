@@ -13,10 +13,14 @@ public class Message{
     @JsonProperty("data")
     String data;
 
+    @JsonProperty("time")
+    String time;
+
     public  Message(String sender, String receiver, String data) {
         this.sender = sender;
         this.receiver = receiver;
         this.data = data;
+        
     }
 
     public Message() {}     // Constructeur pour la désérialisation JSON
