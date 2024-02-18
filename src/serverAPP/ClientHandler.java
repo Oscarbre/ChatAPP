@@ -73,7 +73,7 @@ public class ClientHandler implements Runnable {
     
     public void removeClientHandler() {
         clientHandlers.remove(this);
-        broadcastMessage(new Message("SERVEUR","ALL",clientUsername + " a quitté la conversation."));
+        broadcastMessage(new Message("SERVEUR","ALL", clientUsername + " a quitté la conversation."));
     }
 
     public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
