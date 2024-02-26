@@ -1,4 +1,4 @@
-package serverAPP;
+package User;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;

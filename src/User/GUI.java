@@ -1,4 +1,6 @@
-package serverAPP;
+package User;
+
+import java.time.LocalTime;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -114,11 +116,13 @@ public class GUI extends Application {
         // Créer le titre de la conversation
 
         Text title = new Text("Conversation de groupe");
-        title.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-        HBox titleHbox = new HBox(5);
-        titleHbox.setPadding(new Insets(10));
-        titleHbox.getChildren().add(title);
-        titleHbox.setAlignment(Pos.CENTER);
+        title.setFont(Font.font("Tahoma", FontWeight.BOLD, 16));
+        Text subTitle = new Text("Connecté en temps que : " + clientUsername);
+        subTitle.setFont(Font.font("Tahoma", FontWeight.NORMAL, 12));
+        VBox top = new VBox(5);
+        top.setAlignment(Pos.CENTER);
+        top.setPadding(new Insets(8));
+        top.getChildren().addAll(title, subTitle);
 
         // Créer la zone de conversation
         ScrollPane conversationScrollPane = new ScrollPane();
@@ -138,10 +142,11 @@ public class GUI extends Application {
         sendButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent a) {
+                LocalTime tempsActuel = LocalTime.now();
                 HBox messageBox = new HBox(5);
                 messageBox.setPadding(new Insets(5, 0, 5, 5));      // haut droite bas gauche
                 messageBox.setAlignment(Pos.CENTER_LEFT);
-                Text senderText = new Text("moi : ");
+                Text senderText = new Text("[" + String.valueOf(tempsActuel.getHour()) + ":" + String.valueOf(tempsActuel.getMinute()) + "] " + "moi :");
                 senderText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
                 Text msgText = new Text(messageTextArea.getText());
                 msgText.setFont(Font.font("Arial", 14));
@@ -162,7 +167,7 @@ public class GUI extends Application {
         inputContainer.setAlignment(Pos.CENTER);
 
         // Positionner la zone de conversation en haut et la zone de saisie en bas
-        root.setTop(titleHbox);
+        root.setTop(top);
         root.setCenter(conversationScrollPane);
         root.setBottom(inputContainer);
 

@@ -1,6 +1,9 @@
-package serverAPP;
+package Server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import User.Message;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -28,7 +31,7 @@ public class ClientHandler implements Runnable {
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.clientUsername = objectMapper.readValue(bufferedReader.readLine(),Message.class).getSender();
             clientHandlers.add(this);
-            broadcastMessage(new Message("SERVER","ALL"," : " + clientUsername + " a rejoint la conversation !"));
+            broadcastMessage(new Message("SERVER","ALL"," " + clientUsername + " a rejoint la conversation !"));
         } catch (IOException e) {
             closeEverything(socket, bufferedReader, bufferedWriter);
         }

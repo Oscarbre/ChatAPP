@@ -1,4 +1,4 @@
-package serverAPP;
+package User;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -43,16 +43,19 @@ public class Controller {
 
 
     public void updateConversation(Message msgFromServer){
-        Platform.runLater(() -> {;
+        Platform.runLater(() -> {;                                          // Pour se séparer du thread principal de javafx
             VBox conversationContainer = gui.getConversationContainer();
             HBox messageBox = new HBox(5);
             messageBox.setPadding(new Insets(5, 0, 5, 5));      // haut droite bas gauche
             messageBox.setAlignment(Pos.CENTER_LEFT);
 
-            Text senderText = new Text(msgFromServer.getSender() + " : ");
+            Text senderText = new Text(msgFromServer.getTime() + " " + msgFromServer.getSender() + " :");
             Text msgText = new Text(msgFromServer.getData());
-            senderText.setFont(Font.font("Arial", 14));
-            msgText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+            senderText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+            msgText.setFont(Font.font("Arial", 14));
+            if (msgFromServer.getSender() == "SERVEUR") {
+                msgText.setFont(Font.font("Arial", FontWeight.BOLD,14));
+            }
             
             messageBox.getChildren().addAll(senderText, msgText);
 
