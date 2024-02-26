@@ -31,9 +31,9 @@ public class ClientHandler implements Runnable {
             this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             this.clientUsername = objectMapper.readValue(bufferedReader.readLine(),Message.class).getSender();
             clientHandlers.add(this);
-            broadcastMessage(new Message("SERVER","ALL"," " + clientUsername + " a rejoint la conversation !"));
+            broadcastMessage(new Message("SERVEUR","ALL", clientUsername + " a rejoint la conversation !"));
         } catch (IOException e) {
-            closeEverything(socket, bufferedReader, bufferedWriter);
+            closeEverything();
         }
     }
     
@@ -50,7 +50,7 @@ public class ClientHandler implements Runnable {
                 broadcastMessage(messageFromClient);
             } catch (IOException  e) {
                 e.printStackTrace();
-                closeEverything(socket, bufferedReader, bufferedWriter);
+                closeEverything();
                 break;
             }
         }
@@ -67,9 +67,8 @@ public class ClientHandler implements Runnable {
                     clientHandler.bufferedWriter.flush();
                 }
             } catch (IOException e) {
-                closeEverything(socket, bufferedReader, bufferedWriter);
+                closeEverything();
                 e.printStackTrace();
-                
             }
         }
     }    
@@ -79,7 +78,7 @@ public class ClientHandler implements Runnable {
         broadcastMessage(new Message("SERVEUR","ALL", clientUsername + " a quitté la conversation."));
     }
 
-    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+    public void closeEverything() {
         removeClientHandler();
         try {
             if (bufferedReader != null) {

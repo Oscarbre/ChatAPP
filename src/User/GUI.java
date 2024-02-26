@@ -21,6 +21,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 //////////////////////////////////////////////////////////              MAIN            ///////////////////////////////////////////////
 
@@ -44,6 +45,10 @@ public class GUI extends Application {
         primaryStage.setTitle("Oscar CHENE - ChatAPP");
         showLoginScreen();
         primaryStage.show();
+
+        primaryStage.setOnCloseRequest((WindowEvent event) -> {
+            controller.closeEverything();
+        });
     }
 
     public static void main(String[] args) {
@@ -96,6 +101,7 @@ public class GUI extends Application {
                 clientUsername = userTextField.getText();
                 controller.createClient(clientUsername);
                 showConversationScreen();
+                controller.updateConversation(new Message("SERVEUR","ALL","Vous avez rejoint la conversation"));
             }
         });
 
@@ -142,18 +148,9 @@ public class GUI extends Application {
         sendButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent a) {
-                LocalTime tempsActuel = LocalTime.now();
-                HBox messageBox = new HBox(5);
-                messageBox.setPadding(new Insets(5, 0, 5, 5));      // haut droite bas gauche
-                messageBox.setAlignment(Pos.CENTER_LEFT);
-                Text senderText = new Text("[" + String.valueOf(tempsActuel.getHour()) + ":" + String.valueOf(tempsActuel.getMinute()) + "] " + "moi :");
-                senderText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-                Text msgText = new Text(messageTextArea.getText());
-                msgText.setFont(Font.font("Arial", 14));
-                messageBox.getChildren().addAll(senderText, msgText);
-                conversationContainer.getChildren().add(messageBox);
-
-                controller.sendMessage(messageTextArea.getText());
+                Message msgToSend = new Message(clientUsername,"ALL", messageTextArea.getText());
+                controller.sendMessage(msgToSend);
+                controller.updateConversation(msgToSend);
                 messageTextArea.clear();
             }
         });

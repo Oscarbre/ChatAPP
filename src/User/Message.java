@@ -24,7 +24,9 @@ public class Message{
         this.data = data;
 
         LocalTime tempsActuel = LocalTime.now();
-        this.time = "[" + String.valueOf(tempsActuel.getHour()) + ":" + String.valueOf(tempsActuel.getMinute()) + "]";
+        String heure = (tempsActuel.getHour() < 10) ? "0" + String.valueOf(tempsActuel.getHour()) : String.valueOf(tempsActuel.getHour());
+        String minute = (tempsActuel.getMinute() < 10) ? "0" + String.valueOf(tempsActuel.getMinute()) : String.valueOf(tempsActuel.getMinute());
+        this.time = "[" + heure + ":" + minute + "]";
     }
 
     public Message() {}     // Constructeur pour la désérialisation JSON

@@ -26,7 +26,7 @@ public class Client {
             this.clientObjectMapper = new ObjectMapper();
             this.controller = controller;
         } catch (IOException e) {
-            closeEverything(socket, bufferedReader, bufferedWriter);
+            closeEverything();
             e.printStackTrace();
         }
     } 
@@ -42,7 +42,7 @@ public class Client {
                 System.out.println("ERREUR : socket non connecté");
             }
         } catch (IOException e) {
-            closeEverything(socket, bufferedReader, bufferedWriter);
+            closeEverything();
             e.printStackTrace();
         }
     }
@@ -59,7 +59,7 @@ public class Client {
                         msgFromServer = clientObjectMapper.readValue(jsonServer, Message.class);
                         controller.updateConversation(msgFromServer);
                     } catch (IOException e) {
-                        closeEverything(socket, bufferedReader, bufferedWriter);
+                        closeEverything();
                         e.printStackTrace();
                     }
                 }
@@ -67,7 +67,7 @@ public class Client {
         }).start();
     }
 
-    public void closeEverything(Socket socket, BufferedReader bufferedReader, BufferedWriter bufferedWriter) {
+    public void closeEverything() {
         try {
             if (bufferedReader != null) {
                 bufferedReader.close();

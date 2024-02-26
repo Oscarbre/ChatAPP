@@ -34,9 +34,8 @@ public class Controller {
         }
     }
 
-    public void sendMessage(String messageToSend){
-        Message msg = new Message(client.getUsername(),"ALL", messageToSend);
-        client.sendStream(msg);
+    public void sendMessage(Message messageToSend){
+        client.sendStream(messageToSend);
     }
 
 //////////////////////////////////////////////////////////             TO GUI            ///////////////////////////////////////////////
@@ -53,8 +52,17 @@ public class Controller {
             Text msgText = new Text(msgFromServer.getData());
             senderText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
             msgText.setFont(Font.font("Arial", 14));
+
+            if (msgFromServer.getSender() == client.getUsername()) {
+                messageBox.setStyle("-fx-background-color: #87CEEB;");
+                senderText = new Text(msgFromServer.getTime() + " MOI :");
+            }
             if (msgFromServer.getSender() == "SERVEUR") {
+                messageBox.setStyle("-fx-background-color: #D3D3D3;");
                 msgText.setFont(Font.font("Arial", FontWeight.BOLD,14));
+            }
+            else {
+                messageBox.setStyle("-fx-background-color: #ADD8E6;");
             }
             
             messageBox.getChildren().addAll(senderText, msgText);
@@ -63,6 +71,12 @@ public class Controller {
         });
         
         
+    }
+
+    public void closeEverything() {
+        Platform.runLater(() -> {;
+            client.closeEverything();
+        });
     }
 
     
