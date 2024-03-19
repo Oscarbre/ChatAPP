@@ -27,7 +27,7 @@ public class Controller {
         try {
             Socket socket = new Socket("localhost", 1234);
             this.client = new Client(socket, username, this);
-            client.sendStream(new Message(username,"NONE","NONE")); //pour initialiser le clienHandle
+            client.sendStream(new Message(username,"NONE","NONE")); //pour initialiser le clienHandler
             client.listenForMessage();
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,20 +50,19 @@ public class Controller {
 
             Text senderText = new Text(msgFromServer.getTime() + " " + msgFromServer.getSender() + " :");
             Text msgText = new Text(msgFromServer.getData());
-            senderText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
             msgText.setFont(Font.font("Arial", 14));
 
-            if (msgFromServer.getSender() == client.getUsername()) {
-                messageBox.setStyle("-fx-background-color: #87CEEB;");
-                senderText = new Text(msgFromServer.getTime() + " MOI :");
-            }
             if (msgFromServer.getSender() == "SERVEUR") {
                 messageBox.setStyle("-fx-background-color: #D3D3D3;");
                 msgText.setFont(Font.font("Arial", FontWeight.BOLD,14));
-            }
-            else {
+            } else if (msgFromServer.getSender() == client.getUsername()) {
+                messageBox.setStyle("-fx-background-color: #87CEEB;");
+                senderText = new Text(msgFromServer.getTime() + " MOI :");
+            } else {
                 messageBox.setStyle("-fx-background-color: #ADD8E6;");
             }
+
+            senderText.setFont(Font.font("Arial", FontWeight.BOLD, 14));
             
             messageBox.getChildren().addAll(senderText, msgText);
 

@@ -1,8 +1,7 @@
 package User;
 
-import java.time.LocalTime;
-
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -46,8 +45,13 @@ public class GUI extends Application {
         showLoginScreen();
         primaryStage.show();
 
-        primaryStage.setOnCloseRequest((WindowEvent event) -> {
-            controller.closeEverything();
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {  //fermeture de l'application
+            @Override
+            public void handle(WindowEvent event) {
+                controller.closeEverything();
+                Platform.exit(); 
+                System.exit(0); 
+            }
         });
     }
 
